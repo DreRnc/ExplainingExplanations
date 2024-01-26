@@ -1,0 +1,8 @@
+**.pyc
+# ignore all files pycache
+
+__pycache__/
+# ignore all files pycache
+
+**__pycache__
+__pycache__
