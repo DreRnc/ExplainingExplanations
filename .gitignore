@@ -1,8 +1,4 @@
-**.pyc
-# ignore all files pycache
-
+# Ignore all pycache directories in gitignore file
 __pycache__/
-# ignore all files pycache
-
-**__pycache__
-__pycache__
+# Ignore all .pyc files in the repository
+*.pyc
