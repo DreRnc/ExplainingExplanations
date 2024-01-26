@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "explainingexplanations"
+version = "0.1.0"
+description = ""
+authors = ["Andrea Roncoli <115221482+DreRnc@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+transformers = "^4.37.1"
+sentencepiece = "^0.1.99"
+ipykernel = "^6.29.0"
+datasets = "^2.16.1"
+torch = "^2.1.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
