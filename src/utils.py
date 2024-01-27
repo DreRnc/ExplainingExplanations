@@ -1,3 +1,5 @@
+import torch
+
 def generate_batch_prompts_mnli(batch):
     """Generate the prompt for MNLI.
 
@@ -32,7 +34,7 @@ def convert_labels(output):
         output (lst of str): the output of the model.
 
     Returns:
-        lst of int: the converted output.
+        torch.tensor: the labels.
     """
     labels = []
     for i in range(len(output)):
@@ -44,23 +46,7 @@ def convert_labels(output):
             labels.append(2)
         else: 
             raise ValueError("The output of the model is not valid.")
-    return labels
-
-
-
-""" def tokenize_function(example, tokenizer):
-    prompts = generate_batch_prompts_mnli(example)
-    l = ["entailment", "neutral", "contraddiction"]
-    # Tokenize the premise (input) and label
-    inputs = tokenizer(prompts, padding='max_length', truncation=True, max_length=128)
-    labels = tokenizer([l[i] for i in example["label"]], padding="max_length", truncation=True)
-
-    # Return a dictionary containing input and label tokens
-    return {
-        "input_ids": inputs["input_ids"],
-        "attention_mask": inputs["attention_mask"],
-        "labels": labels["input_ids"],
-    } """
+    return torch.tensor(labels)
 
 def tokenize_function(examples, tokenizer):     
     """Tokenize the dataset. This function is passed to the map method.
