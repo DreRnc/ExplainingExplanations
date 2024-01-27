@@ -25,19 +25,27 @@ def generate_prompt_mnli(datapoint):
     prompt = "mnli hypothesis: " + datapoint['hypothesis'] + ' premise: ' + datapoint['premise']
     return prompt
 
-def evaluate_output_mnli(output, label):
-    """T5 outputs a string. We need to compare it to the label which is
-    0, 1 or 2 (entailment, neutral, contradiction).
+def convert_labels(output):
+    """Convert the output of the model "entailment", "neutral", "contradiction" to 0, 1, 2.
+
+    Args:
+        output (lst of str): the output of the model.
+
+    Returns:
+        lst of int: the converted output.
     """
-    if output == 'entailment':
-        output = 0
-    elif output == 'neutral':
-        output = 1
-    elif output == 'contradiction':
-        output = 2
-    else:
-        raise ValueError('Output not recognized')
-    return output == label
+    labels = []
+    for i in range(len(output)):
+        if output[i] == "entailment":
+            labels.append(0)
+        elif output[i] == "neutral":
+            labels.append(1)
+        elif output[i] == "contradiction":
+            labels.append(2)
+        else: 
+            raise ValueError("The output of the model is not valid.")
+    return labels
+
 
 
 """ def tokenize_function(example, tokenizer):
