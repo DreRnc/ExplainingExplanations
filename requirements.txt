@@ -1,6 +1,6 @@
 datasets
 transformers
 sentencepiece
-accelerate -U
+accelerate
 evaluate
 numpy
