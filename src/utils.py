@@ -40,7 +40,7 @@ def evaluate_output_mnli(output, label):
     return output == label
 
 
-def tokenize_function(example, tokenizer):
+""" def tokenize_function(example, tokenizer):
     prompts = generate_batch_prompts_mnli(example)
     l = ["entailment", "neutral", "contraddiction"]
     # Tokenize the premise (input) and label
@@ -52,10 +52,10 @@ def tokenize_function(example, tokenizer):
         "input_ids": inputs["input_ids"],
         "attention_mask": inputs["attention_mask"],
         "labels": labels["input_ids"],
-    }
+    } """
 
-# def tokenize_function(examples, tokenizer):
-#     """Tokenize the dataset. This function is passed to the map method.
-#     """
-#     prompts = generate_batch_prompts_mnli(examples)
-#     return tokenizer(prompts, padding='max_length', truncation=True, max_length=128)
+def tokenize_function(examples, tokenizer):     
+    """Tokenize the dataset. This function is passed to the map method.
+    """
+    prompts = generate_batch_prompts_mnli(examples)
+    return tokenizer(prompts, padding='max_length', truncation=True, max_length=128)
