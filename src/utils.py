@@ -84,9 +84,9 @@ def eval_pred_transform_accuracy(eval_pred, tokenizer):
         tuple: predictions and labels.
 
     """
-    logits = eval_pred.predictions
+    pred_ids = eval_pred.predictions
     labels = eval_pred.label_ids
-    pred_ids = torch.argmax(logits, axis=1)
+
     pred_str = tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
     label_str = tokenizer.batch_decode(labels, skip_special_tokens=True)
     
