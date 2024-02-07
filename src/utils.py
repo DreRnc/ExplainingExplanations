@@ -1,3 +1,7 @@
+import torch
+import partial
+import evaluate 
+
 def generate_batch_prompts_mnli(batch):
     """Generate the prompt for MNLI.
 
@@ -54,8 +58,53 @@ def tokenize_function(example, tokenizer):
         "labels": labels["input_ids"],
     }
 
-# def tokenize_function(examples, tokenizer):
-#     """Tokenize the dataset. This function is passed to the map method.
-#     """
-#     prompts = generate_batch_prompts_mnli(examples)
-#     return tokenizer(prompts, padding='max_length', truncation=True, max_length=128)
+def compute_metrics(eval_pred, transform, metric):
+    """Compute the metrics.
+
+    Args:
+        eval_pred (EvalPrediction): the predictions and labels.
+        transform (function): the function to transform the logits and labels.
+        metric (datasets.Metric): the metric.
+
+    Returns:
+        dict: the computed metrics.
+
+    """
+    pred, labels = transform(eval_pred) 
+    return metric.compute(predictions=pred, references=labels)
+
+def eval_pred_transform_accuracy(logits, labels, tokenizer):
+    """Transform the logits and labels to compute the accuracy.
+
+    Args:
+        logits (torch.Tensor): the logits.
+        labels (torch.Tensor): the labels.
+        tokenizer (transformers.PreTrainedTokenizer): the tokenizer.
+
+    Returns:
+        tuple: predictions and labels.
+
+    """
+    pred_ids = torch.argmax(logits, axis=1)
+    pred_str = tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
+    label_str = tokenizer.batch_decode(labels, skip_special_tokens=True)
+    
+    return pred_str, label_str
+
+def pre_process_logits_for_accuracy(logits, labels, tokenizer):
+    """Pre-process the logits and labels to compute the accuracy.
+
+    Args:
+        logits (torch.Tensor): the logits.
+        labels (torch.Tensor): the labels.
+        tokenizer (transformers.PreTrainedTokenizer): the tokenizer.
+
+    Returns:
+        tuple: predictions and labels.
+
+    """
+    pred_ids= torch.argmax(logits, axis=1)
+
+    return pred_ids, labels
+
+compute_accuracy = partial(compute_metrics, transform=eval_pred_transform_accuracy, metric = evaluate.load('accuracy'))
