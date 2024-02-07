@@ -91,7 +91,7 @@ def eval_pred_transform_accuracy(logits, labels, tokenizer):
     
     return pred_str, label_str
 
-def pre_process_logits_for_accuracy(logits, labels, tokenizer):
+def preprocess_logits_for_accuracy(logits, labels, tokenizer):
     """Pre-process the logits and labels to compute the accuracy.
 
     Args:
