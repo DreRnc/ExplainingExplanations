@@ -91,8 +91,8 @@ def eval_pred_transform_accuracy(logits, labels, tokenizer):
     
     return pred_str, label_str
 
-def preprocess_logits_for_accuracy(logits, labels):
-    """Pre-process the logits and labels to compute the accuracy.
+def preprocess_logits_argmax(logits, labels):
+    """Pre-process the logits and labels to compute the metrics.
 
     Args:
         logits (torch.Tensor): the logits.
@@ -102,7 +102,7 @@ def preprocess_logits_for_accuracy(logits, labels):
         tuple: predictions and labels.
 
     """
-    pred_ids= torch.argmax(logits, axis=1)
+    pred_ids= torch.argmax(logits[0], axis=1)
 
     return pred_ids, labels
 
