@@ -1,5 +1,5 @@
 import torch
-import partial
+from functools import partial
 import evaluate 
 
 def generate_batch_prompts_mnli(batch):
