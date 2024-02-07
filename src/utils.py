@@ -73,18 +73,19 @@ def compute_metrics(eval_pred, transform, metric):
     pred, labels = transform(eval_pred) 
     return metric.compute(predictions=pred, references=labels)
 
-def eval_pred_transform_accuracy(logits, labels, tokenizer):
+def eval_pred_transform_accuracy(eval_pred, tokenizer):
     """Transform the logits and labels to compute the accuracy.
 
     Args:
-        logits (torch.Tensor): the logits.
-        labels (torch.Tensor): the labels.
+        eval_pred (EvalPrediction): the predictions and labels.
         tokenizer (transformers.PreTrainedTokenizer): the tokenizer.
 
     Returns:
         tuple: predictions and labels.
 
     """
+    logits = eval_pred.predictions
+    labels = eval_pred.label_ids
     pred_ids = torch.argmax(logits, axis=1)
     pred_str = tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
     label_str = tokenizer.batch_decode(labels, skip_special_tokens=True)
