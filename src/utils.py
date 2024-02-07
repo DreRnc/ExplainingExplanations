@@ -91,13 +91,12 @@ def eval_pred_transform_accuracy(logits, labels, tokenizer):
     
     return pred_str, label_str
 
-def preprocess_logits_for_accuracy(logits, labels, tokenizer):
+def preprocess_logits_for_accuracy(logits, labels):
     """Pre-process the logits and labels to compute the accuracy.
 
     Args:
         logits (torch.Tensor): the logits.
         labels (torch.Tensor): the labels.
-        tokenizer (transformers.PreTrainedTokenizer): the tokenizer.
 
     Returns:
         tuple: predictions and labels.
