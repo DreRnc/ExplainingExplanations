@@ -58,19 +58,20 @@ def tokenize_function(example, tokenizer):
         "labels": labels["input_ids"],
     }
 
-def compute_metrics(eval_pred, transform, metric):
+def compute_metrics(eval_pred, pred_transform, metric):
     """Compute the metrics.
 
     Args:
         eval_pred (EvalPrediction): the predictions and labels.
-        transform (function): the function to transform the logits and labels.
+        pred_transform (function): the function to transform the logits and labels.
         metric (datasets.Metric): the metric.
 
     Returns:
         dict: the computed metrics.
 
     """
-    pred, labels = transform(eval_pred) 
+    pred, labels = pred_transform(eval_pred) 
+    print(pred, labels)
     return metric.compute(predictions=pred, references=labels)
 
 def eval_pred_transform_accuracy(eval_pred, tokenizer):
@@ -85,15 +86,9 @@ def eval_pred_transform_accuracy(eval_pred, tokenizer):
 
     """
     pred_ids = eval_pred.predictions[0]
-    labels = eval_pred.label_ids
-    print('pred_ids', pred_ids)
-    print('pred_ids shape', pred_ids.shape)
-    print('labels', labels)
-    print('labels shape', labels.shape)
+    label_ids = eval_pred.label_ids
     pred_str = tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
-    label_str = tokenizer.batch_decode(labels, skip_special_tokens=True)
-    print('pred_str', pred_str)
-    print('label_str', label_str)
+    label_str = tokenizer.batch_decode(label_ids, skip_special_tokens=True)
     return pred_str, label_str
 
 def preprocess_logits_argmax(logits, labels):
@@ -107,9 +102,6 @@ def preprocess_logits_argmax(logits, labels):
         tuple: predictions and labels.
 
     """
-    print('logits[0] shape at preprocess', logits[0].shape)
     pred_ids = logits[0].argmax(dim=-1)
-    print('pred_ids shape at preprocess', pred_ids.shape)   
-    print('pred_ids at preprocess', pred_ids)
 
     return pred_ids, labels
