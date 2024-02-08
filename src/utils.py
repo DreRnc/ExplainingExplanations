@@ -46,16 +46,17 @@ def evaluate_output_mnli(output, label):
 
 def tokenize_function(example, tokenizer):
     prompts = generate_batch_prompts_mnli(example)
-    l = ["entailment", "neutral", "contraddiction"]
+    #l = ["entailment", "neutral", "contraddiction"]
     # Tokenize the premise (input) and label
     inputs = tokenizer(prompts, padding='max_length', truncation=True, max_length=128)
-    labels = tokenizer([l[i] for i in example["label"]], padding="max_length", truncation=True)
-
+    #labels = tokenizer([l[i] for i in example["label"]], padding="max_length", truncation=True)
+    labels = [torch.reshape(torch.tensor(example["label"]), (-1, 1))]
+    print('input_ids:', inputs["input_ids"])
     # Return a dictionary containing input and label tokens
     return {
         "input_ids": inputs["input_ids"],
         "attention_mask": inputs["attention_mask"],
-        "labels": labels["input_ids"],
+        "label": labels
     }
 
 def compute_metrics(eval_pred, pred_transform, metric):
@@ -74,7 +75,9 @@ def compute_metrics(eval_pred, pred_transform, metric):
     print('eval_pred.predictions:', eval_pred.predictions)
     print('eval_pred.predictions[0]:', eval_pred.predictions[0])
     print('eval_pred.label_ids:', eval_pred.label_ids)
-    pred, labels = pred_transform(eval_pred)
+    #pred, labels = pred_transform(eval_pred)
+    pred = eval_pred.predictions[0]
+    labels = eval_pred.label_ids
     return metric.compute(predictions=pred, references=labels)
 
 def eval_pred_transform_accuracy(eval_pred, tokenizer):
@@ -87,8 +90,10 @@ def eval_pred_transform_accuracy(eval_pred, tokenizer):
     Returns:
         tuple: predictions and labels in format (list of int).
     """
-    pred_ids = eval_pred.predictions[0]
+    pred_ids = eval_pred.predictions[1]
     label_ids = eval_pred.label_ids
+    print('pred_ids:', pred_ids)
+    print('label_ids:', label_ids)
 
     pred_str = tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
     label_str = tokenizer.batch_decode(label_ids, skip_special_tokens=True)
@@ -104,7 +109,9 @@ def eval_pred_transform_accuracy(eval_pred, tokenizer):
         except ValueError:
             pred.append(-1)
     labels = [l.index(label) for label in label_str]
+
     print('Number of predicted non valid labels:', pred.count(-1))
+
     return pred, labels
 
 def preprocess_logits_argmax(logits, labels):
@@ -118,6 +125,7 @@ def preprocess_logits_argmax(logits, labels):
         tuple: predictions and labels.
 
     """
+    print('logits:', logits)
     pred_ids = torch.argmax(logits[0], dim=-1)
-
+    print('pred_ids:', pred_ids)
     return pred_ids, labels
