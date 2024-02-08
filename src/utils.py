@@ -105,7 +105,7 @@ def preprocess_logits_argmax(logits, labels):
         tuple: predictions and labels.
 
     """
-    pred_ids = torch.argmax(logits[0], axis=-1)
+    pred_ids = torch.argmax(logits, axis=-1)
 
     return pred_ids, labels
 
