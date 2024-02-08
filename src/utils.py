@@ -71,7 +71,8 @@ def compute_metrics(eval_pred, pred_transform, metric):
 
     """
     pred, labels = pred_transform(eval_pred) 
-    print(pred, labels)
+    print(pred)
+    print(labels)
     return metric.compute(predictions=pred, references=labels)
 
 def eval_pred_transform_accuracy(eval_pred, tokenizer):
