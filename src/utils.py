@@ -97,7 +97,7 @@ def eval_pred_transform_accuracy(eval_pred, tokenizer):
         except ValueError:
             pred.append(-1)
     labels = [l.index(label) for label in label_str]
-
+    print('Number of predicted non valid labels:', pred.count(-1))
     return pred, labels
 
 def preprocess_logits_argmax(logits, labels):
