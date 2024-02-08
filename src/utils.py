@@ -70,6 +70,9 @@ def compute_metrics(eval_pred, pred_transform, metric):
         dict: the computed metrics.
 
     """
+    print('eval_pred:', eval_pred)
+    print('eval_pred.predictions:', eval_pred.predictions)
+    print('eval_pred.label_ids:', eval_pred.label_ids)
     pred, labels = pred_transform(eval_pred)
     return metric.compute(predictions=pred, references=labels)
 
