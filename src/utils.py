@@ -102,6 +102,8 @@ def eval_pred_transform_accuracy(eval_pred, tokenizer):
     Returns:
         tuple: predictions and labels in format (list of int).
     """
+    print('eval_pred.predictions:', eval_pred.predictions)
+    print('eval_pred.label_ids:', eval_pred.label_ids)
     pred = eval_pred.predictions
     labels = eval_pred.label_ids
 
