@@ -66,8 +66,8 @@ def tokenize_function(example, tokenizer):
     prompts = generate_batch_prompts_mnli(example)
     l = ["entailment", "neutral", "contradiction"]
     # Tokenize the premise (input) and label
-    inputs = tokenizer(prompts, padding='max_length', truncation=True, max_length=128)
-    labels = tokenizer([l[i] for i in example["label"]], padding="max_length", truncation=True)
+    inputs = tokenizer(prompts, truncation=True, max_length=128)
+    labels = tokenizer([l[i] for i in example["label"]], truncation=True)
 
     # Return a dictionary containing input and label tokens
     return {
