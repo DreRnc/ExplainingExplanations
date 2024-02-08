@@ -106,7 +106,7 @@ def preprocess_logits_argmax(logits, labels):
 
     """
     print('logits at preprocess', logits)
-    pred_ids = torch.argmax(logits, axis=-1)
+    pred_ids = logits[0].argmax(dim=-1)    
     print('pred_ids at preprocess', pred_ids)
 
     return pred_ids, labels
