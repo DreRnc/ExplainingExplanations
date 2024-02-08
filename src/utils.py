@@ -105,8 +105,10 @@ def preprocess_logits_argmax(logits, labels):
         tuple: predictions and labels.
 
     """
-    print('logits at preprocess', logits)
-    pred_ids = logits[0].argmax(dim=-1)    
+    print('logiy shape at preprocess', logits.shape)
+    print('logits[0] shape at preprocess', logits[0].shape)
+    pred_ids = logits[0].argmax(dim=-1)
+    print('pred_ids shape at preprocess', pred_ids.shape)   
     print('pred_ids at preprocess', pred_ids)
 
     return pred_ids, labels
