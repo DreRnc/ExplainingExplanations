@@ -1,4 +1,5 @@
 import torch
+import numpy as np
 from functools import partial
 import evaluate 
 
@@ -107,6 +108,7 @@ def eval_pred_transform_accuracy(eval_pred, tokenizer):
     pred = tokenizer.batch_decode(pred, skip_special_tokens=True)
     pred_nums = [convert_label_to_num_mnli(p) for p in pred]
 
+    labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
     labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
     labels_nums = [convert_label_to_num_mnli(l) for l in labels]
 
