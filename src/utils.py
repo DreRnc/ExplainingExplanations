@@ -104,10 +104,10 @@ def eval_pred_transform_accuracy(eval_pred, tokenizer):
     pred = eval_pred.predictions
     labels = eval_pred.label_ids
 
-    pred = [tokenizer.batch_decode(p, skip_special_tokens=True) for p in pred]
+    pred = tokenizer.batch_decode(pred, skip_special_tokens=True)
     pred_nums = [convert_label_to_num_mnli(p) for p in pred]
 
-    labels = [tokenizer.batch_decode(l, skip_special_tokens=True) for l in labels]
+    labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
     labels_nums = [convert_label_to_num_mnli(l) for l in labels]
 
     print('Number of predictions not in [entailment, neutral, contradiction]:', len([p for p in pred_nums if p not in [0, 1, 2]])) 
