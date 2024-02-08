@@ -43,20 +43,36 @@ def evaluate_output_mnli(output, label):
         raise ValueError('Output not recognized')
     return output == label
 
+def convert_label_to_num_mnli(label):
+    """Convert the label to a number.
+
+    Args:
+        label (str): the label.
+
+    Returns:
+        int: the number corresponding to the label.
+    """
+    if label == 'entailment':
+        return 0
+    elif label == 'neutral':
+        return 1
+    elif label == 'contradiction':
+        return 2
+    else:
+        return -1
 
 def tokenize_function(example, tokenizer):
     prompts = generate_batch_prompts_mnli(example)
-    #l = ["entailment", "neutral", "contraddiction"]
+    l = ["entailment", "neutral", "contradiction"]
     # Tokenize the premise (input) and label
     inputs = tokenizer(prompts, padding='max_length', truncation=True, max_length=128)
-    #labels = tokenizer([l[i] for i in example["label"]], padding="max_length", truncation=True)
-    labels = [torch.reshape(torch.tensor(example["label"]), (-1, 1))]
-    print('input_ids:', inputs["input_ids"])
+    labels = tokenizer([l[i] for i in example["label"]], padding="max_length", truncation=True)
+
     # Return a dictionary containing input and label tokens
     return {
         "input_ids": inputs["input_ids"],
         "attention_mask": inputs["attention_mask"],
-        "label": labels
+        "labels": labels["input_ids"],
     }
 
 def compute_metrics(eval_pred, pred_transform, metric):
@@ -71,13 +87,8 @@ def compute_metrics(eval_pred, pred_transform, metric):
         dict: the computed metrics.
 
     """
-    print('eval_pred:', eval_pred)
-    print('eval_pred.predictions:', eval_pred.predictions)
-    print('eval_pred.predictions[0]:', eval_pred.predictions[0])
-    print('eval_pred.label_ids:', eval_pred.label_ids)
-    #pred, labels = pred_transform(eval_pred)
-    pred = eval_pred.predictions[0]
-    labels = eval_pred.label_ids
+    pred, labels = pred_transform(eval_pred)
+
     return metric.compute(predictions=pred, references=labels)
 
 def eval_pred_transform_accuracy(eval_pred, tokenizer):
@@ -90,42 +101,15 @@ def eval_pred_transform_accuracy(eval_pred, tokenizer):
     Returns:
         tuple: predictions and labels in format (list of int).
     """
-    pred_ids = eval_pred.predictions[1]
-    label_ids = eval_pred.label_ids
-    print('pred_ids:', pred_ids)
-    print('label_ids:', label_ids)
+    pred = eval_pred.predictions
+    labels = eval_pred.label_ids
 
-    pred_str = tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
-    label_str = tokenizer.batch_decode(label_ids, skip_special_tokens=True)
-    print('pred_str:', pred_str)
-    print('label_str:', label_str)
+    pred = [tokenizer.decode(p, skip_special_tokens=True) for p in pred]
+    pred_nums = [convert_label_to_num_mnli(p) for p in pred]
 
-    # Convert the string labels to integers
-    l = ["entailment", "neutral", "contraddiction"]
-    pred = []
-    for i in range(len(pred_str)):
-        try:
-            pred.append(l.index(pred_str[i]))
-        except ValueError:
-            pred.append(-1)
-    labels = [l.index(label) for label in label_str]
+    labels = [tokenizer.decode(l, skip_special_tokens=True) for l in labels]
+    labels_nums = [convert_label_to_num_mnli(l) for l in labels]
 
-    print('Number of predicted non valid labels:', pred.count(-1))
-
-    return pred, labels
-
-def preprocess_logits_argmax(logits, labels):
-    """Pre-process the logits and labels to compute the metrics.
-
-    Args:
-        logits (list of torch.Tensor): the logits and the labels logits.
-        labels (torch.Tensor): the labels.
-
-    Returns:
-        tuple: predictions and labels.
-
-    """
-    print('logits:', logits)
-    pred_ids = torch.argmax(logits[0], dim=-1)
-    print('pred_ids:', pred_ids)
-    return pred_ids, labels
+    print('Number of predictions not in [entailment, neutral, contradiction]:', len([p for p in pred_nums if p not in [0, 1, 2]])) 
+    print('Wrong predictions and labels:', [(p, l) for p, l in zip(pred, labels) if p != l])
+    return pred_nums, labels_nums
