@@ -70,9 +70,7 @@ def compute_metrics(eval_pred, pred_transform, metric):
         dict: the computed metrics.
 
     """
-    pred, labels = pred_transform(eval_pred) 
-    print(pred)
-    print(labels)
+    pred, labels = pred_transform(eval_pred)
     return metric.compute(predictions=pred, references=labels)
 
 def eval_pred_transform_accuracy(eval_pred, tokenizer):
@@ -83,14 +81,24 @@ def eval_pred_transform_accuracy(eval_pred, tokenizer):
         tokenizer (transformers.PreTrainedTokenizer): the tokenizer.
 
     Returns:
-        tuple: predictions and labels.
-
+        tuple: predictions and labels in format (list of int).
     """
     pred_ids = eval_pred.predictions[0]
     label_ids = eval_pred.label_ids
     pred_str = tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
     label_str = tokenizer.batch_decode(label_ids, skip_special_tokens=True)
-    return pred_str, label_str
+
+    # Convert the string labels to integers
+    l = ["entailment", "neutral", "contraddiction"]
+    pred = []
+    for i in range(len(pred_str)):
+        try:
+            pred.append(l.index(pred_str[i]))
+        except ValueError:
+            pred.append(-1)
+    labels = [l.index(label) for label in label_str]
+
+    return pred, labels
 
 def preprocess_logits_argmax(logits, labels):
     """Pre-process the logits and labels to compute the metrics.
