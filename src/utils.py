@@ -89,6 +89,8 @@ def compute_metrics(eval_pred, pred_transform, metric):
 
     """
     pred, labels = pred_transform(eval_pred)
+    print('pred:', pred)    
+    print('labels:', labels)
 
     return metric.compute(predictions=pred, references=labels)
 
