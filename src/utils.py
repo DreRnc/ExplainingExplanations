@@ -89,14 +89,15 @@ def eval_pred_transform_accuracy(eval_pred, tokenizer):
 
     pred_str = tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
     label_str = tokenizer.batch_decode(labels, skip_special_tokens=True)
-    
+    print('pred_str', pred_str)
+    print('label_str', label_str)
     return pred_str, label_str
 
 def preprocess_logits_argmax(logits, labels):
     """Pre-process the logits and labels to compute the metrics.
 
     Args:
-        logits (torch.Tensor): the logits.
+        logits (list of torch.Tensor): the logits and the labels logits.
         labels (torch.Tensor): the labels.
 
     Returns:
