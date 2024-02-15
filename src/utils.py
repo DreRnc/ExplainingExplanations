@@ -63,17 +63,57 @@ def convert_label_to_num_mnli(label):
         return -1
 
 def tokenize_function(example, tokenizer):
+    """Tokenize mapping function.
+    This function generates the promopt for the T5 model and tokenizes it.
+    The label is the tokenization of the label class.
+    
+    Args:
+        example (dict): the example to tokenize.
+        tokenizer (transformers.PreTrainedTokenizer): the tokenizer.
+        
+    Returns:
+        dict: the tokenized prompt and label.
+    """
+
     prompts = generate_batch_prompts_mnli(example)
     l = ["entailment", "neutral", "contradiction"]
     # Tokenize the premise (input) and label
     inputs = tokenizer(prompts, truncation=True, max_length=128)
-    labels = tokenizer([l[i] for i in example["label"]], truncation=True)
+    labels_tokenized = tokenizer([l[i] for i in example["label"]], truncation=True)
 
     # Return a dictionary containing input and label tokens
     return {
         "input_ids": inputs["input_ids"],
         "attention_mask": inputs["attention_mask"],
-        "labels": labels["input_ids"],
+        "labels": labels_tokenized["input_ids"],
+    }
+
+def tokenize_function_ex(example, tokenizer):
+    """Tokenize mapping function.
+    This function generates the promopt for the T5 model and tokenizes it.
+    The label is the tokenization of the label and explanation in the following fromat:
+    "label: <label> explanation: <explanation>"
+
+    Args:
+        example (dict): the example to tokenize.
+        tokenizer (transformers.PreTrainedTokenizer): the tokenizer.
+    
+    Returns:
+        dict: the tokenized prompt and label.
+    """
+    prompts = generate_batch_prompts_mnli(example)
+    l = ["entailment", "neutral", "contradiction"]
+    # Tokenize the premise (input) and label
+    inputs = tokenizer(prompts, truncation=True, max_length=128)
+    label_classes = [l[i] for i in example["label"]]
+    explanations = example['explanation_1']t
+    labels_tokenized = tokenizer([f"label: {label} explanation: {explanation}" for label, explanation in zip(label_classes, explanations)], truncation=True)
+
+    # Return a dictionary containing input and label tokens
+    return {
+        "input_ids": inputs["input_ids"],
+        "attention_mask": inputs["attention_mask"],
+        "labels": labels_tokenized["input_ids"],
     }
 
 def compute_metrics(eval_pred, pred_transform, metric):
@@ -102,8 +142,8 @@ def eval_pred_transform_accuracy(eval_pred, tokenizer):
     Returns:
         tuple: predictions and labels in format (list of int).
     """
-    print('eval_pred.predictions:', eval_pred.predictions)
-    print('eval_pred.label_ids:', eval_pred.label_ids)
+    #print('eval_pred.predictions:', eval_pred.predictions)
+    #print('eval_pred.label_ids:', eval_pred.label_ids)
     pred = eval_pred.predictions
     labels = eval_pred.label_ids
 
