@@ -160,12 +160,14 @@ def eval_pred_transform_accuracy(eval_pred, tokenizer, remove_explanations_from_
     Returns:
         tuple: predictions and labels in format (list of int).
     """
-    #print('eval_pred.predictions:', eval_pred.predictions)
-    #print('eval_pred.label_ids:', eval_pred.label_ids)
+    print('eval_pred.predictions:', eval_pred.predictions)
+    print('eval_pred.label_ids:', eval_pred.label_ids)
     pred = eval_pred.predictions
     labels = eval_pred.label_ids
 
+    pred = np.where(pred != -100, pred, tokenizer.pad_token_id)
     pred = tokenizer.batch_decode(pred, skip_special_tokens=True)
+
     labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
     labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
 
