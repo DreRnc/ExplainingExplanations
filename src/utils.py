@@ -106,7 +106,7 @@ def tokenize_function_ex(example, tokenizer):
     # Tokenize the premise (input) and label
     inputs = tokenizer(prompts, truncation=True, max_length=128)
     label_classes = [l[i] for i in example["label"]]
-    explanations = example['explanation_1']t
+    explanations = example['explanation_1']
     labels_tokenized = tokenizer([f"label: {label} explanation: {explanation}" for label, explanation in zip(label_classes, explanations)], truncation=True)
 
     # Return a dictionary containing input and label tokens
