@@ -160,6 +160,8 @@ def eval_pred_transform_accuracy(eval_pred, tokenizer, remove_explanations_from_
     Returns:
         tuple: predictions and labels in format (list of int).
     """
+    print('eval_pred.predictions.shape:', eval_pred.predictions.shape)
+    print('eval_pred.label_ids.shape:', eval_pred.label_ids.shape)
     print('eval_pred.predictions:', eval_pred.predictions)
     print('eval_pred.label_ids:', eval_pred.label_ids)
     pred = eval_pred.predictions
