@@ -150,7 +150,7 @@ def compute_metrics(eval_pred, pred_transform, metric):
 
     return metric.compute(predictions=pred, references=labels)
 
-def eval_pred_transform_accuracy(eval_pred, tokenizer, remove_explanations_from_label = False):
+def eval_pred_transform_accuracy(eval_pred, tokenizer, remove_explanations_from_label = False, debugging = False):
     """Transform the logits and labels to compute the accuracy.
 
     Args:
@@ -160,30 +160,34 @@ def eval_pred_transform_accuracy(eval_pred, tokenizer, remove_explanations_from_
     Returns:
         tuple: predictions and labels in format (list of int).
     """
-    print('eval_pred.predictions.shape:', eval_pred.predictions.shape)
-    print('eval_pred.label_ids.shape:', eval_pred.label_ids.shape)
-    print('eval_pred.predictions:', eval_pred.predictions)
-    print('eval_pred.label_ids:', eval_pred.label_ids)
+    if debugging:
+        print('eval_pred.predictions.shape:', eval_pred.predictions.shape)
+        print('eval_pred.label_ids.shape:', eval_pred.label_ids.shape)
+        print('eval_pred.predictions:', eval_pred.predictions)
+        print('eval_pred.label_ids:', eval_pred.label_ids)
+    
     pred = eval_pred.predictions
     labels = eval_pred.label_ids
 
+    # Remove the -100 padding put by the collator to make data of same length
+    # -100 is chosen as padding as it is automatically ignored by the PyTorch losses
     pred = np.where(pred != -100, pred, tokenizer.pad_token_id)
     pred = tokenizer.batch_decode(pred, skip_special_tokens=True)
 
     labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
     labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
 
-    print('Before removing explanations:\n', 'pred', pred[:5], '\n', 'labels:', labels[:5])
+    if debugging:
+        print('Before removing explanations:\n', 'pred', pred[:5], '\n', 'labels:', labels[:5])
 
     if remove_explanations_from_label:
         pred = [remove_explanation(p) for p in pred]
         labels = [remove_explanation(l) for l in labels]
 
-    print('After removing explanations:\n', 'pred', pred[:5], '\n', 'labels:', labels[:5])
+    if debugging:
+        print('After removing explanations:\n', 'pred', pred[:5], '\n', 'labels:', labels[:5])
 
     pred_nums = [convert_label_to_num_mnli(p) for p in pred]
     labels_nums = [convert_label_to_num_mnli(l) for l in labels]
-    
-    #print('Number of predictions not in [entailment, neutral, contradiction]:', len([p for p in pred_nums if p not in [0, 1, 2]])) 
-    #print('Wrong predictions and labels:', [(p, l) for p, l in zip(pred, labels) if p != l])
+
     return pred_nums, labels_nums
