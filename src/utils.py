@@ -62,6 +62,25 @@ def convert_label_to_num_mnli(label):
     else:
         return -1
 
+def convert_label_to_num_mnli_removing_explanation(label):
+    """Convert the label to a number.
+    Take in input a string and retrieve the word after 'label: '.
+    Then convert it to number and return it.
+    If the prediction string is not in the format 'label: <label> explanation: <explanation>',
+    return -1.
+
+    Args:
+        label (str): the label.
+
+    Returns:
+        int: the number corresponding to the label.
+    """
+    try:
+        label = label.split('label: ')[1].split(' explanation: ')[0]
+        return convert_label_to_num_mnli(label)
+    except:
+        return -1
+
 def tokenize_function(example, tokenizer):
     """Tokenize mapping function.
     This function generates the promopt for the T5 model and tokenizes it.
@@ -132,7 +151,7 @@ def compute_metrics(eval_pred, pred_transform, metric):
 
     return metric.compute(predictions=pred, references=labels)
 
-def eval_pred_transform_accuracy(eval_pred, tokenizer):
+def eval_pred_transform_accuracy(eval_pred, tokenizer, remove_explanations_from_label = False):
     """Transform the logits and labels to compute the accuracy.
 
     Args:
@@ -148,11 +167,17 @@ def eval_pred_transform_accuracy(eval_pred, tokenizer):
     labels = eval_pred.label_ids
 
     pred = tokenizer.batch_decode(pred, skip_special_tokens=True)
-    pred_nums = [convert_label_to_num_mnli(p) for p in pred]
+    if remove_explanations_from_label:
+        pred_nums = [convert_label_to_num_mnli_removing_explanation(p) for p in pred]
+    else:
+        pred_nums = [convert_label_to_num_mnli(p) for p in pred]
 
     labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
     labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
-    labels_nums = [convert_label_to_num_mnli(l) for l in labels]
+    if remove_explanations_from_label:
+        labels_nums = [convert_label_to_num_mnli_removing_explanation(l) for l in labels]
+    else:
+        labels_nums = [convert_label_to_num_mnli(l) for l in labels]
 
     print('Number of predictions not in [entailment, neutral, contradiction]:', len([p for p in pred_nums if p not in [0, 1, 2]])) 
     print('Wrong predictions and labels:', [(p, l) for p, l in zip(pred, labels) if p != l])
