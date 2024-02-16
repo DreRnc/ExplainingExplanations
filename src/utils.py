@@ -1,7 +1,4 @@
-import torch
 import numpy as np
-from functools import partial
-import evaluate 
 
 def generate_batch_prompts_mnli(batch):
     """Generate the prompt for MNLI.
@@ -189,5 +186,9 @@ def eval_pred_transform_accuracy(eval_pred, tokenizer, remove_explanations_from_
 
     pred_nums = [convert_label_to_num_mnli(p) for p in pred]
     labels_nums = [convert_label_to_num_mnli(l) for l in labels]
+
+    num_invalid_answers = len([p for p in pred_nums if p not in [0,1,2]])
+    if num_invalid_answers > 0:
+        print('Number of predictions not in [entailment, neutral, contradiction]:', num_invalid_answers)
 
     return pred_nums, labels_nums
