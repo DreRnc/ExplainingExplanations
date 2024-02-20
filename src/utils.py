@@ -106,7 +106,7 @@ def tokenize_function(example, tokenizer):
         "labels": labels_tokenized["input_ids"],
     }
 
-def tokenize_function_ex(example, tokenizer):
+def tokenize_function_ex(example, tokenizer, modified_explanations = None):
     """Tokenize mapping function.
     This function generates the promopt for the T5 model and tokenizes it.
     The label is the tokenization of the label and explanation in the following fromat:
@@ -124,7 +124,12 @@ def tokenize_function_ex(example, tokenizer):
     # Tokenize the premise (input) and label
     inputs = tokenizer(prompts, truncation=True, max_length=128)
     label_classes = [l[i] for i in example["label"]]
-    explanations = example['explanation_1']
+
+    if modified_explanations is None:
+        explanations = example['explanation_1']
+    else:
+        explanations = modified_explanations
+        
     labels_tokenized = tokenizer([f"label: {label} explanation: {explanation}" for label, explanation in zip(label_classes, explanations)], truncation=True)
 
     # Return a dictionary containing input and label tokens
