@@ -2,16 +2,18 @@
 name = "explainingexplanations"
 version = "0.1.0"
 description = ""
-authors = ["Andrea Roncoli <115221482+DreRnc@users.noreply.github.com>"]
+authors = ["None"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-transformers = "^4.37.1"
+transformers = {extras = ["torch"], version = "^4.37.2"}
 sentencepiece = "^0.1.99"
 ipykernel = "^6.29.0"
 datasets = "^2.16.1"
 torch = "^2.1.2"
+scikit-learn = "^1.4.1.post1"
+accelerate = "^0.27.2"
 
 
 [build-system]
