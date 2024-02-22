@@ -1,7 +1,0 @@
-datasets
-transformers
-sentencepiece
-accelerate
-evaluate
-torch
-scikit-learn
