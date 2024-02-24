@@ -51,19 +51,17 @@ def save_explanations(dataset):
     
     texts = []
     texts = [example["explanation_1"] for example in dataset["train"]]
-
-    # Save the texts to a text file
-    with open("ex_files/explanations_train.txt", "w") as f:
+    with open("ex_files/explanations_train.txt", "w", encoding="utf-8") as f:
         f.writelines(text + "\n" for text in texts)
 
     texts = []
     texts = [example["explanation_1"] for example in dataset["validation"]]
-    with open("ex_files/explanations_val.txt", "w") as f:
+    with open("ex_files/explanations_val.txt", "w", encoding="utf-8") as f:
         f.writelines(text + "\n" for text in texts)
 
     texts = []
     texts = [example["explanation_1"] for example in dataset["test"]]
-    with open("ex_files/explanations_test.txt", "w") as f:
+    with open("ex_files/explanations_test.txt", "w", encoding="utf-8") as f:
         f.writelines(text + "\n" for text in texts)
 
     return ["ex_files/explanations_train.txt", "ex_files/explanations_val.txt", "ex_files/explanations_test.txt"]
