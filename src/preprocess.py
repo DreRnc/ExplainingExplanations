@@ -80,11 +80,11 @@ def save_shuffled_explanations(explanation_dirs):
         os.makedirs("ex_files")
 
     # Read the explanations from the files
-    with open(explanation_dirs[0], "r") as f:
+    with open(explanation_dirs[0], "r", encoding="utf-8") as f:
         explanations_train = f.readlines()
-    with open(explanation_dirs[1], "r") as f:
+    with open(explanation_dirs[1], "r", encoding="utf-8") as f:
         explanations_val = f.readlines()
-    with open(explanation_dirs[2], "r") as f:
+    with open(explanation_dirs[2], "r", encoding="utf-8") as f:
         explanations_test = f.readlines()
 
     # Shuffle the explanations
@@ -93,11 +93,11 @@ def save_shuffled_explanations(explanation_dirs):
     random.shuffle(explanations_test)
 
     # Save the shuffled explanations to a file
-    with open("ex_files/shuffled_explanations_train.txt", "w") as f:
+    with open("ex_files/shuffled_explanations_train.txt", "w", encoding="utf-8") as f:
         f.writelines(explanations_train)
-    with open("ex_files/shuffled_explanations_val.txt", "w") as f:
+    with open("ex_files/shuffled_explanations_val.txt", "w", encoding="utf-8") as f:
         f.writelines(explanations_val)
-    with open("ex_files/shuffled_explanations_test.txt", "w") as f:
+    with open("ex_files/shuffled_explanations_test.txt", "w", encoding="utf-8") as f:
         f.writelines(explanations_test)
 
     return ["ex_files/shuffled_explanations_train.txt", "ex_files/shuffled_explanations_val.txt", "ex_files/shuffled_explanations_test.txt"]
@@ -115,11 +115,11 @@ def retrieve_explanations(explanation_dirs):
     explanations = {}
 
     # Read the explanations from the files
-    with open(explanation_dirs[0], "r") as f:
+    with open(explanation_dirs[0], "r", encoding="utf-8") as f:
         explanations["train"] = f.readlines()
-    with open(explanation_dirs[1], "r") as f:
+    with open(explanation_dirs[1], "r", encoding="utf-8") as f:
         explanations["validation"] = f.readlines()
-    with open(explanation_dirs[2], "r") as f:
+    with open(explanation_dirs[2], "r", encoding="utf-8") as f:
         explanations["test"] = f.readlines()
 
     return explanations
