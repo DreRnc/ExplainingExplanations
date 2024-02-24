@@ -1,7 +1,8 @@
 import numpy as np
+import random
 
 def generate_batch_prompts_mnli(batch):
-    """Generate the prompt for MNLI.
+    """Generate the prompt with the MNLI pretrained format.
 
     Args:
         batch (dict of lists): a dictionary containing the lists of premises and hypotheses of length batch_size.
@@ -16,7 +17,7 @@ def generate_batch_prompts_mnli(batch):
     return prompts
 
 def generate_prompt_mnli(datapoint):
-    """Generate the prompt for MNLI.
+    """Generate the prompt with the MNLI pretrained format.
 
     Args:
         datapoint (dict): a dictionary containing the premise and hypothesis.
@@ -27,37 +28,32 @@ def generate_prompt_mnli(datapoint):
     prompt = "mnli hypothesis: " + datapoint['hypothesis'] + ' premise: ' + datapoint['premise']
     return prompt
 
-def evaluate_output_mnli(output, label):
-    """T5 outputs a string. We need to compare it to the label which is
-    0, 1 or 2 (entailment, neutral, contradiction).
-    """
-    if output == 'entailment':
-        output = 0
-    elif output == 'neutral':
-        output = 1
-    elif output == 'contradiction':
-        output = 2
-    else:
-        raise ValueError('Output not recognized')
-    return output == label
-
-def convert_label_to_num_mnli(label):
-    """Convert the label to a number.
+def generate_batch_prompts(batch):
+    """Generate the prompt for finetuning on eSNLI.
 
     Args:
-        label (str): the label.
+        batch (dict of lists): a dictionary containing the lists of premises and hypotheses of length batch_size.
 
     Returns:
-        int: the number corresponding to the label.
+        list of str: the prompts.
     """
-    if label == 'entailment':
-        return 0
-    elif label == 'neutral':
-        return 1
-    elif label == 'contradiction':
-        return 2
-    else:
-        return -1
+    prompts = []
+    for i in range(len(batch['premise'])):
+        prompt = "hypothesis: " + batch['hypothesis'][i] + ' premise: ' + batch['premise'][i]
+        prompts.append(prompt)
+    return prompts
+
+def generate_prompt(datapoint):
+    """Generate the prompt for finetuning on eSNLI.
+
+    Args:
+        datapoint (dict): a dictionary containing the premise and hypothesis.
+
+    Returns:
+        str: the prompt.
+    """
+    prompt = "hypothesis: " + datapoint['hypothesis'] + ' premise: ' + datapoint['premise']
+    return prompt
 
 def remove_explanation(label):
     """Convert the label to a number.
@@ -103,7 +99,7 @@ def tokenize_function(example, tokenizer):
         "labels": labels_tokenized["input_ids"],
     }
 
-def tokenize_function_ex(example, tokenizer, modified_explanations = None):
+def tokenize_function_ex(example, tokenizer, explanations = None):
     """Tokenize mapping function.
     This function generates the promopt for the T5 model and tokenizes it.
     The label is the tokenization of the label and explanation in the following fromat:
@@ -112,6 +108,7 @@ def tokenize_function_ex(example, tokenizer, modified_explanations = None):
     Args:
         example (dict): the example to tokenize.
         tokenizer (transformers.PreTrainedTokenizer): the tokenizer.
+        explanations (list of str): the explanations to use. If None, the explanation_1 field of the example is used.
     
     Returns:
         dict: the tokenized prompt and label.
@@ -122,10 +119,8 @@ def tokenize_function_ex(example, tokenizer, modified_explanations = None):
     inputs = tokenizer(prompts, truncation=True, max_length=128)
     label_classes = [l[i] for i in example["label"]]
 
-    if modified_explanations is None:
+    if explanations is None:
         explanations = example['explanation_1']
-    else:
-        explanations = modified_explanations
         
     labels_tokenized = tokenizer([f"label: {label} explanation: {explanation}" for label, explanation in zip(label_classes, explanations)], truncation=True)
 
@@ -151,6 +146,24 @@ def compute_metrics(eval_pred, pred_transform, metric):
     pred, labels = pred_transform(eval_pred)
 
     return metric.compute(predictions=pred, references=labels)
+
+def convert_label_to_num_mnli(label):
+    """Convert the label to a number.
+
+    Args:
+        label (str): the label.
+
+    Returns:
+        int: the number corresponding to the label.
+    """
+    if label == 'entailment':
+        return 0
+    elif label == 'neutral':
+        return 1
+    elif label == 'contradiction':
+        return 2
+    else:
+        return -1
 
 def eval_pred_transform_accuracy(eval_pred, tokenizer, remove_explanations_from_label = False, debugging = False):
     """Transform the logits and labels to compute the accuracy.
