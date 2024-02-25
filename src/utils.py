@@ -73,7 +73,7 @@ def remove_explanation(label):
     except:
         return '-1'
     
-def tokenize_function(example, tokenizer):
+def tokenize_function(example, tokenizer, use_mnli_format = False):
     """Tokenize mapping function.
     This function generates the promopt for the T5 model and tokenizes it.
     The label is the tokenization of the label class.
@@ -81,12 +81,16 @@ def tokenize_function(example, tokenizer):
     Args:
         example (dict): the example to tokenize.
         tokenizer (transformers.PreTrainedTokenizer): the tokenizer.
+        use_mnli_format (bool): whether to use the mnli format for prompts or not
         
     Returns:
         dict: the tokenized prompt and label.
     """
-
-    prompts = generate_batch_prompts_mnli(example)
+    if use_mnli_format:
+        prompts = generate_batch_prompts_mnli(example)
+    else:
+        prompts = generate_batch_prompts(example)
+    
     l = ["entailment", "neutral", "contradiction"]
     # Tokenize the premise (input) and label
     inputs = tokenizer(prompts, truncation=True, max_length=128)
@@ -99,7 +103,7 @@ def tokenize_function(example, tokenizer):
         "labels": labels_tokenized["input_ids"],
     }
 
-def tokenize_function_ex(example, tokenizer, explanations = None):
+def tokenize_function_ex(example, tokenizer, explanations = None, use_mnli_format = False):
     """Tokenize mapping function.
     This function generates the promopt for the T5 model and tokenizes it.
     The label is the tokenization of the label and explanation in the following fromat:
@@ -109,11 +113,16 @@ def tokenize_function_ex(example, tokenizer, explanations = None):
         example (dict): the example to tokenize.
         tokenizer (transformers.PreTrainedTokenizer): the tokenizer.
         explanations (list of str): the explanations to use. If None, the explanation_1 field of the example is used.
+        use_mnli_format (bool): whether to use the mnli format for prompts or not
     
     Returns:
         dict: the tokenized prompt and label.
     """
-    prompts = generate_batch_prompts_mnli(example)
+    if use_mnli_format:
+        prompts = generate_batch_prompts_mnli(example)
+    else:
+        prompts = generate_batch_prompts(example)
+    
     l = ["entailment", "neutral", "contradiction"]
     # Tokenize the premise (input) and label
     inputs = tokenizer(prompts, truncation=True, max_length=128)
