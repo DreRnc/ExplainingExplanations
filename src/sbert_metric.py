@@ -1,6 +1,8 @@
 from sentence_transformers.util import cos_sim
 import numpy as np
-from datasets import Metric
+from datasets import Metric, MetricInfo
+
+
 
 class SbertMetric(Metric):
 
@@ -17,3 +19,6 @@ class SbertMetric(Metric):
 
 		output = {'average_similarity': average_similarity}
 		return output
+	
+	def _info(self):
+		return MetricInfo('average_similarity')
