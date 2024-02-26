@@ -56,20 +56,34 @@ def generate_prompt(datapoint):
     return prompt
 
 def remove_explanation(label):
-    """Convert the label to a number.
-    Take in input a string and retrieve the word after 'label: '.
-    Then convert it to number and return it.
-    If the prediction string is not in the format 'label: <label> explanation: <explanation>',
-    return -1.
+    """Remove the explanation from the label.
+    Label is in format "label: <label> explanation: <explanation>"
+    If not found, returns -1.
 
     Args:
         label (str): the label.
 
     Returns:
-        int: the number corresponding to the label.
+        str: the label without the explanation.
     """
     try:
         return label.split('label: ')[1].split(' explanation: ')[0]
+    except:
+        return '-1'
+    
+def retrieve_explanation(label):
+    """Retrieve the explanation from the label.
+    Label is in format "label: <label> explanation: <explanation>"
+    If not found, returns -1.
+
+    Args:
+        label (str): the label.
+
+    Returns:
+        str: the explanation.
+    """
+    try:
+        return label.split('explanation: ')[1]
     except:
         return '-1'
     
@@ -140,7 +154,34 @@ def tokenize_function_ex(example, tokenizer, explanations = None, use_mnli_forma
         "labels": labels_tokenized["input_ids"],
     }
 
-def compute_metrics(eval_pred, pred_transform, metric):
+def compute_metrics(eval_pred, pred_transforms, metrics):
+    """Compute the metrics.
+
+    Args:
+        eval_pred (EvalPrediction): the predictions and labels.
+        pred_transforms (lst of function or function): the functions to transform the logits and labels.
+        metric (lst of datasets.Metric or datasets.Metric): the metrics.
+
+    Returns:
+        dict: the computed metrics.
+
+    """
+    metric_dict = {}
+
+    if not isinstance(pred_transforms, list):
+        pred_transforms = [pred_transforms]
+    if not isinstance(metrics, list):
+        metrics = [metrics]
+    
+    if len(pred_transforms) != len(metrics):
+        raise ValueError(f'Length of pred_transforms and metrics must be the same, but are: {len(pred_transforms)} and {len(metrics)}')
+
+    for i in range(len(pred_transforms)):
+        metric_dict.update(_compute_metric(eval_pred, pred_transforms[i], metrics[i]))
+    
+    return metric_dict
+
+def _compute_metric(eval_pred, pred_transform, metric):
     """Compute the metrics.
 
     Args:
@@ -149,7 +190,7 @@ def compute_metrics(eval_pred, pred_transform, metric):
         metric (datasets.Metric): the metric.
 
     Returns:
-        dict: the computed metrics.
+        dict: the computed metric.
 
     """
     pred, labels = pred_transform(eval_pred)
@@ -173,6 +214,35 @@ def convert_label_to_num_mnli(label):
         return 2
     else:
         return -1
+
+def eval_pred_transform_sbert(eval_pred, tokenizer):
+    """Transform the logits and labels into sentences
+    to compute the similarity with SBERT.
+
+    Args:
+        eval_pred (EvalPrediction): the predictions and labels.
+        tokenizer (transformers.PreTrainedTokenizer): the tokenizer.
+
+    Returns:
+        tuple: predictions and labels of the explanations in format (list of str).
+    """
+
+    pred = eval_pred.predictions
+    labels = eval_pred.label_ids
+
+    # Remove the -100 padding put by the collator to make data of same length
+    # -100 is chosen as padding as it is automatically ignored by the PyTorch losses
+    pred = np.where(pred != -100, pred, tokenizer.pad_token_id)
+    pred = tokenizer.batch_decode(pred, skip_special_tokens=True)
+
+    labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
+    labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
+
+    pred_explanations = [retrieve_explanation(p) for p in pred]
+    labels_explanations = [retrieve_explanation(l) for l in labels]
+
+    return pred_explanations, labels_explanations
+
 
 def eval_pred_transform_accuracy(eval_pred, tokenizer, remove_explanations_from_label = False, debugging = False):
     """Transform the logits and labels to compute the accuracy.
