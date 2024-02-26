@@ -5,3 +5,4 @@ accelerate
 evaluate
 torch
 scikit-learn
+sentence-transformers
