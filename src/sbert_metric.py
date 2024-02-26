@@ -1,7 +1,5 @@
 from sentence_transformers.util import cos_sim
 import numpy as np
-from datasets import Metric, MetricInfo
-
 
 
 class SbertMetric():
@@ -16,5 +14,5 @@ class SbertMetric():
 		similarities = [cos_sim(pred, label) for pred, label in zip(pred_emb, label_emb)]
 		average_similarity = np.mean(similarities)
 
-		output = {'average_similarity': average_similarity}
+		output = {'explanation_average_similarity': average_similarity}
 		return output
