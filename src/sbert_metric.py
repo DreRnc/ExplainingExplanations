@@ -4,13 +4,12 @@ from datasets import Metric, MetricInfo
 
 
 
-class SbertMetric(Metric):
+class SbertMetric():
 
 	def __init__(self, model):
-		super().__init__()
 		self.model = model
 
-	def _compute(self, predictions, references):
+	def compute(self, predictions, references):
 		pred_emb = self.model.encode(predictions)
 		label_emb = self.model.encode(references)
 
@@ -19,6 +18,3 @@ class SbertMetric(Metric):
 
 		output = {'average_similarity': average_similarity}
 		return output
-	
-	def _info(self):
-		return MetricInfo('average_similarity')
