@@ -66,12 +66,11 @@ def save_explanations(dataset):
 
     return ["ex_files/explanations_train.txt", "ex_files/explanations_val.txt", "ex_files/explanations_test.txt"]
 
-def save_shuffled_explanations(explanation_dirs):
+def save_shuffled_explanations(explanation_dir):
     """Save the shuffled explanations.
-    This function takes a list of explanation directories and saves the shuffled explanations to a file.
 
     Args:
-        explanation_dirs (list of str): the list of directories.
+        explanation_dir (str): directory of file with explanations to shuffle
     
     Returns:
         str: the path to the shuffled explanations file.
@@ -80,46 +79,29 @@ def save_shuffled_explanations(explanation_dirs):
         os.makedirs("ex_files")
 
     # Read the explanations from the files
-    with open(explanation_dirs[0], "r", encoding="utf-8") as f:
+    with open(explanation_dir, "r", encoding="utf-8") as f:
         explanations_train = f.readlines()
-    with open(explanation_dirs[1], "r", encoding="utf-8") as f:
-        explanations_val = f.readlines()
-    with open(explanation_dirs[2], "r", encoding="utf-8") as f:
-        explanations_test = f.readlines()
 
     # Shuffle the explanations
     random.shuffle(explanations_train)
-    random.shuffle(explanations_val)
-    random.shuffle(explanations_test)
 
     # Save the shuffled explanations to a file
     with open("ex_files/shuffled_explanations_train.txt", "w", encoding="utf-8") as f:
         f.writelines(explanations_train)
-    with open("ex_files/shuffled_explanations_val.txt", "w", encoding="utf-8") as f:
-        f.writelines(explanations_val)
-    with open("ex_files/shuffled_explanations_test.txt", "w", encoding="utf-8") as f:
-        f.writelines(explanations_test)
 
-    return ["ex_files/shuffled_explanations_train.txt", "ex_files/shuffled_explanations_val.txt", "ex_files/shuffled_explanations_test.txt"]
+    return "ex_files/shuffled_explanations_train.txt"
 
-def retrieve_explanations(explanation_dirs):
-    """Retrieve the explanations.
-    This function takes a list of explanation directories and retrieves the explanations.
-
+def retrieve_explanations(explanation_dir):
+    """Retrieve the explanations from a txt file.
     Args:
-        explanation_dirs (list of str): the list of directories.
+        explanation_dirs (str): the directory of txt file with explanations.
     
     Returns:
-        dict: the explanations.
+        lst of str: the explanations.
     """
-    explanations = {}
 
     # Read the explanations from the files
-    with open(explanation_dirs[0], "r", encoding="utf-8") as f:
-        explanations["train"] = f.readlines()
-    with open(explanation_dirs[1], "r", encoding="utf-8") as f:
-        explanations["validation"] = f.readlines()
-    with open(explanation_dirs[2], "r", encoding="utf-8") as f:
-        explanations["test"] = f.readlines()
+    with open(explanation_dir, "r", encoding="utf-8") as f:
+        explanations= f.readlines()
 
     return explanations

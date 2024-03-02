@@ -1,5 +1,6 @@
 import numpy as np
 import random
+import os
 
 def generate_batch_prompts_mnli(batch):
     """Generate the prompt with the MNLI pretrained format.
@@ -55,7 +56,7 @@ def generate_prompt(datapoint):
     prompt = "hypothesis: " + datapoint['hypothesis'] + ' premise: ' + datapoint['premise']
     return prompt
 
-def remove_explanation(label):
+def remove_explanation(label, explanation_first = False):
     """Remove the explanation from the label.
     Label is in format "label: <label> explanation: <explanation>"
     If not found, returns -1.
@@ -66,12 +67,18 @@ def remove_explanation(label):
     Returns:
         str: the label without the explanation.
     """
-    try:
-        return label.split('label: ')[1].split(' explanation: ')[0]
-    except:
-        return '-1'
+    if explanation_first:
+        try:
+            return label.split(' label: ')[1]
+        except:
+            return '-1'
+    else:
+        try:
+            return label.split('label: ')[1].split(' explanation: ')[0]
+        except:
+            return '-1'
     
-def retrieve_explanation(label):
+def retrieve_explanation(label, explanation_first = False):
     """Retrieve the explanation from the label.
     Label is in format "label: <label> explanation: <explanation>"
     If not found, returns -1.
@@ -82,10 +89,17 @@ def retrieve_explanation(label):
     Returns:
         str: the explanation.
     """
-    try:
-        return label.split('explanation: ')[1]
-    except:
-        return '-1'
+
+    if explanation_first:
+        try:
+            return label.split('explanation: ')[1].split(' label: ')[0]
+        except:
+            return '-1'
+    else:
+        try:
+            return label.split(' explanation: ')[1]
+        except:
+            return '-1'
     
 def tokenize_function(example, tokenizer, use_mnli_format = False):
     """Tokenize mapping function.
@@ -117,7 +131,7 @@ def tokenize_function(example, tokenizer, use_mnli_format = False):
         "labels": labels_tokenized["input_ids"],
     }
 
-def tokenize_function_ex(example, tokenizer, explanations = None, use_mnli_format = False):
+def tokenize_function_ex(example, tokenizer, explanations = None, use_mnli_format = False, explanation_first = False):
     """Tokenize mapping function.
     This function generates the promopt for the T5 model and tokenizes it.
     The label is the tokenization of the label and explanation in the following fromat:
@@ -128,6 +142,7 @@ def tokenize_function_ex(example, tokenizer, explanations = None, use_mnli_forma
         tokenizer (transformers.PreTrainedTokenizer): the tokenizer.
         explanations (list of str): the explanations to use. If None, the explanation_1 field of the example is used.
         use_mnli_format (bool): whether to use the mnli format for prompts or not
+        explanation_first (bool): whether to put explanation before the label
     
     Returns:
         dict: the tokenized prompt and label.
@@ -144,8 +159,11 @@ def tokenize_function_ex(example, tokenizer, explanations = None, use_mnli_forma
 
     if explanations is None:
         explanations = example['explanation_1']
-        
-    labels_tokenized = tokenizer([f"label: {label} explanation: {explanation}" for label, explanation in zip(label_classes, explanations)], truncation=True)
+    
+    if explanation_first:
+        labels_tokenized = tokenizer([f"explanation: {explanation} label: {label}" for label, explanation in zip(label_classes, explanations)], truncation=True)
+    else:
+        labels_tokenized = tokenizer([f"label: {label} explanation: {explanation}" for label, explanation in zip(label_classes, explanations)], truncation=True)
 
     # Return a dictionary containing input and label tokens
     return {
@@ -178,7 +196,14 @@ def compute_metrics(eval_pred, pred_transforms, metrics):
 
     for i in range(len(pred_transforms)):
         metric_dict.update(_compute_metric(eval_pred, pred_transforms[i], metrics[i]))
-    
+
+    if not os.path.exists("results.txt"):
+        with open("results.txt", 'w') as file:
+            file.write(str(metric_dict) + '\n')
+    else:
+        with open("results.txt", 'a') as file:
+            file.write(str(metric_dict) + '\n')
+
     return metric_dict
 
 def _compute_metric(eval_pred, pred_transform, metric):
@@ -215,7 +240,7 @@ def convert_label_to_num_mnli(label):
     else:
         return -1
 
-def eval_pred_transform_sbert(eval_pred, tokenizer):
+def eval_pred_transform_sbert(eval_pred, tokenizer, explanation_first = False):
     """Transform the logits and labels into sentences
     to compute the similarity with SBERT.
 
@@ -238,13 +263,13 @@ def eval_pred_transform_sbert(eval_pred, tokenizer):
     labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
     labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
 
-    pred_explanations = [retrieve_explanation(p) for p in pred]
-    labels_explanations = [retrieve_explanation(l) for l in labels]
+    pred_explanations = [retrieve_explanation(p, explanation_first=explanation_first) for p in pred]
+    labels_explanations = [retrieve_explanation(l, explanation_first=explanation_first) for l in labels]
 
     return pred_explanations, labels_explanations
 
 
-def eval_pred_transform_accuracy(eval_pred, tokenizer, remove_explanations_from_label = False, debugging = False):
+def eval_pred_transform_accuracy(eval_pred, tokenizer, remove_explanations_from_label = False, debugging = False, explanation_first = False):
     """Transform the logits and labels to compute the accuracy.
 
     Args:
@@ -275,8 +300,8 @@ def eval_pred_transform_accuracy(eval_pred, tokenizer, remove_explanations_from_
         print('Before removing explanations:\n', 'pred', pred[:5], '\n', 'labels:', labels[:5])
 
     if remove_explanations_from_label:
-        pred = [remove_explanation(p) for p in pred]
-        labels = [remove_explanation(l) for l in labels]
+        pred = [remove_explanation(p, explanation_first = explanation_first) for p in pred]
+        labels = [remove_explanation(l, explanation_first = explanation_first) for l in labels]
 
     if debugging:
         print('After removing explanations:\n', 'pred', pred[:5], '\n', 'labels:', labels[:5])
