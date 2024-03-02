@@ -1,0 +1,8 @@
+datasets
+transformers
+sentencepiece
+accelerate
+evaluate
+torch
+scikit-learn
+sentence-transformers
