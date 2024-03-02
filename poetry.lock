@@ -402,6 +402,17 @@ traitlets = ">=4"
 test = ["pytest"]
 
 [[package]]
+name = "conllu"
+version = "4.5.3"
+description = "CoNLL-U Parser parses a CoNLL-U formatted string into a nested python dictionary"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "conllu-4.5.3-py2.py3-none-any.whl", hash = "sha256:2b962b315c3c575e429105d045c888726df780b87a6dfe7609367e861990902d"},
+    {file = "conllu-4.5.3.tar.gz", hash = "sha256:a016cf77e203b2e3ace82fcf0cba2874530d1458e874521640eba36e19546acc"},
+]
+
+[[package]]
 name = "datasets"
 version = "2.17.1"
 description = "HuggingFace community-driven open-source library of datasets"
@@ -2962,4 +2973,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "e84a639197ec654ac99c0a5fcc48da92c522a75c6f693869a67b7342f03a0c79"
+content-hash = "a92ff55bc368dfb75519e19fe1206ccb35a3089743e183aa8b2090280eb521fd"

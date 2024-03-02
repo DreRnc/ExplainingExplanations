@@ -1,0 +1,219 @@
+Model : t5-base
+
+Task 1 : Zero-shot
+{'accuracy': 0.8033387622149837}
+
+Task 2 : Fine-tune without explanations
+{'accuracy': 0.8909774436090225}
+{'accuracy': 0.8984962406015038}
+{'accuracy': 0.906421459053038}
+{'accuracy': 0.9078439341597236}
+{'accuracy': 0.9101808575492786}
+{'accuracy': 0.9106888843730949}
+{'accuracy': 0.9130258077626499}
+{'accuracy': 0.9134322292217029}
+{'accuracy': 0.9127209916683601}
+Test: 
+{'accuracy': 0.9101180781758957}
+
+Task 3 : Fine-tune with explanations
+{'accuracy': 0.8615118878276773, 'explanation_average_similarity': 0.6710326}
+{'accuracy': 0.88528754318228, 'explanation_average_similarity': 0.676296}
+{'accuracy': 0.8896565738671002, 'explanation_average_similarity': 0.67448777}
+{'accuracy': 0.884474700264174, 'explanation_average_similarity': 0.6770256}
+{'accuracy': 0.8964641333062385, 'explanation_average_similarity': 0.67804986}
+{'accuracy': 0.9019508230034545, 'explanation_average_similarity': 0.6784219}
+{'accuracy': 0.8998171103434262, 'explanation_average_similarity': 0.6779304}
+{'accuracy': 0.9025604551920341, 'explanation_average_similarity': 0.6811663}
+{'accuracy': 0.9033732981101402, 'explanation_average_similarity': 0.679225}
+{'accuracy': 0.9078439341597236, 'explanation_average_similarity': 0.6802843}
+{'accuracy': 0.9057102214996952, 'explanation_average_similarity': 0.68190414}
+{'accuracy': 0.9086567770778297, 'explanation_average_similarity': 0.67939526}
+{'accuracy': 0.9075391180654339, 'explanation_average_similarity': 0.6813431}
+Test: 
+
+Task 4 : Fine-tune with shuffled explanations
+{'accuracy': 0.8706563706563707, 'explanation_average_similarity': 0.12893543}
+{'accuracy': 0.8869132290184921, 'explanation_average_similarity': 0.13253133}
+{'accuracy': 0.8967689494005283, 'explanation_average_similarity': 0.09505439}
+{'accuracy': 0.8995122942491364, 'explanation_average_similarity': 0.12433983}
+{'accuracy': 0.903271692745377, 'explanation_average_similarity': 0.12270888}
+{'accuracy': 0.9056086161349319, 'explanation_average_similarity': 0.12182901}
+{'accuracy': 0.9098760414549888, 'explanation_average_similarity': 0.11544292}
+{'accuracy': 0.9107904897378581, 'explanation_average_similarity': 0.123362355}
+{'accuracy': 0.9105872790083316, 'explanation_average_similarity': 0.12448336}
+Test: 
+{'accuracy': 0.9084894136807817, 'explanation_average_similarity': 0.13107407}
+
+Model : t5-small
+
+Task 1 : Zero-shot
+{'accuracy': 0.6550285016286646}
+
+Task 2 : Fine-tune without explanations
+{'accuracy': 0.8461694777484251}
+{'accuracy': 0.8569396464133306}
+{'accuracy': 0.8623247307457834}
+{'accuracy': 0.8643568380410486}
+{'accuracy': 0.8667953667953668}
+{'accuracy': 0.8698435277382646}
+{'accuracy': 0.8724852672221093}
+{'accuracy': 0.8733997155049786}
+{'accuracy': 0.874314163787848}
+{'accuracy': 0.8758382442592969}
+{'accuracy': 0.8782767730136151}
+{'accuracy': 0.8788864052021946}
+{'accuracy': 0.8800040642145905}
+{'accuracy': 0.882137776874619}
+{'accuracy': 0.8809185124974599}
+{'accuracy': 0.8805120910384068}
+{'accuracy': 0.8810201178622231}
+{'accuracy': 0.8843730948994107}
+{'accuracy': 0.8828490144279618}
+{'accuracy': 0.8838650680755944}
+{'accuracy': 0.8862019914651493}
+{'accuracy': 0.8878276773013615}
+{'accuracy': 0.8851859378175168}
+{'accuracy': 0.8896565738671002}
+{'accuracy': 0.888030888030888}
+{'accuracy': 0.888437309489941}
+{'accuracy': 0.8878276773013615}
+{'accuracy': 0.8900629953261532}
+{'accuracy': 0.8890469416785206}
+Test: 
+{'accuracy': 0.8838558631921825}
+
+
+Task 3 : Fine-tune with explanations
+{'accuracy': 0.8058321479374111, 'explanation_average_similarity': 0.6422654}
+{'accuracy': 0.8129445234708392, 'explanation_average_similarity': 0.6489756}
+{'accuracy': 0.8233082706766918, 'explanation_average_similarity': 0.6563036}
+{'accuracy': 0.8377362324730746, 'explanation_average_similarity': 0.6585349}
+{'accuracy': 0.8368217841902053, 'explanation_average_similarity': 0.6566645}
+{'accuracy': 0.8418004470636049, 'explanation_average_similarity': 0.6595327}
+{'accuracy': 0.8471855313960577, 'explanation_average_similarity': 0.66156465}
+{'accuracy': 0.8477951635846372, 'explanation_average_similarity': 0.6616289}
+{'accuracy': 0.8467791099370047, 'explanation_average_similarity': 0.6616297}
+{'accuracy': 0.8620199146514936, 'explanation_average_similarity': 0.66965306}
+{'accuracy': 0.8617150985572039, 'explanation_average_similarity': 0.6684597}
+{'accuracy': 0.8615118878276773, 'explanation_average_similarity': 0.67102325}
+{'accuracy': 0.8625279414753099, 'explanation_average_similarity': 0.66852796}
+{'accuracy': 0.863340784393416, 'explanation_average_similarity': 0.6709995}
+{'accuracy': 0.8678114204429994, 'explanation_average_similarity': 0.6687923}
+{'accuracy': 0.8653728916886811, 'explanation_average_similarity': 0.67212063}
+{'accuracy': 0.8643568380410486, 'explanation_average_similarity': 0.66978323}
+{'accuracy': 0.87157081893924, 'explanation_average_similarity': 0.6716233}
+{'accuracy': 0.8669985775248933, 'explanation_average_similarity': 0.6704438}
+{'accuracy': 0.8689290794553952, 'explanation_average_similarity': 0.67524517}
+{'accuracy': 0.8697419223735013, 'explanation_average_similarity': 0.6736812}
+{'accuracy': 0.8730948994106889, 'explanation_average_similarity': 0.67355746}
+{'accuracy': 0.871977240398293, 'explanation_average_similarity': 0.6730396}
+{'accuracy': 0.8712660028449503, 'explanation_average_similarity': 0.6730555}
+{'accuracy': 0.8717740296687665, 'explanation_average_similarity': 0.6716245}
+{'accuracy': 0.8717740296687665, 'explanation_average_similarity': 0.6727863}
+{'accuracy': 0.8720788457630563, 'explanation_average_similarity': 0.67396265}
+{'accuracy': 0.8738061369640318, 'explanation_average_similarity': 0.67250615}
+{'accuracy': 0.8724852672221093, 'explanation_average_similarity': 0.6724396}
+Test: 
+{'accuracy': 0.8699104234527687, 'explanation_average_similarity': 0.672263}
+
+Task 3b : Fine-tune with explanations (explanations first)
+{'accuracy': 0.665616744564113, 'explanation_average_similarity': 0.6323641}
+{'accuracy': 0.708697419223735, 'explanation_average_similarity': 0.6472303}
+{'accuracy': 0.7247510668563301, 'explanation_average_similarity': 0.64838326}
+{'accuracy': 0.7504572241414347, 'explanation_average_similarity': 0.6528384}
+{'accuracy': 0.7640723430197114, 'explanation_average_similarity': 0.6520101}
+{'accuracy': 0.7809388335704125, 'explanation_average_similarity': 0.6564327}
+{'accuracy': 0.7785003048160943, 'explanation_average_similarity': 0.6567899}
+{'accuracy': 0.7880512091038406, 'explanation_average_similarity': 0.6564641}
+{'accuracy': 0.783885389148547, 'explanation_average_similarity': 0.65737504}
+{'accuracy': 0.783885389148547, 'explanation_average_similarity': 0.65737504}
+{'accuracy': 0.8010566957935379, 'explanation_average_similarity': 0.65632266}
+{'accuracy': 0.7972972972972973, 'explanation_average_similarity': 0.6597504}
+{'accuracy': 0.8068482015850437, 'explanation_average_similarity': 0.66464764}
+{'accuracy': 0.8144686039422881, 'explanation_average_similarity': 0.6612722}
+{'accuracy': 0.8058321479374111, 'explanation_average_similarity': 0.66242725}
+{'accuracy': 0.8215809794757163, 'explanation_average_similarity': 0.6639061}
+{'accuracy': 0.8228002438528754, 'explanation_average_similarity': 0.664165}
+{'accuracy': 0.8220890062995326, 'explanation_average_similarity': 0.66546565}
+{'accuracy': 0.8224954277585856, 'explanation_average_similarity': 0.6659622}
+{'accuracy': 0.8224954277585856, 'explanation_average_similarity': 0.6659622}
+{'accuracy': 0.8253403779719569, 'explanation_average_similarity': 0.66576165}
+{'accuracy': 0.8243243243243243, 'explanation_average_similarity': 0.6613407}
+{'accuracy': 0.8329607803292014, 'explanation_average_similarity': 0.66519046}
+{'accuracy': 0.8327575695996748, 'explanation_average_similarity': 0.6657885}
+{'accuracy': 0.8333672017882544, 'explanation_average_similarity': 0.67066646}
+{'accuracy': 0.8358057305425727, 'explanation_average_similarity': 0.66555774}
+{'accuracy': 0.8362121520016257, 'explanation_average_similarity': 0.6673639}
+{'accuracy': 0.8383458646616542, 'explanation_average_similarity': 0.6688157}
+{'accuracy': 0.8388538914854704, 'explanation_average_similarity': 0.6690701}
+Test: 
+{'accuracy': 0.8319421824104235, 'explanation_average_similarity': 0.6656762}
+
+Task 4 : Fine-tune with shuffled explanations
+{'accuracy': 0.7847998374314163, 'explanation_average_similarity': 0.1420772}
+{'accuracy': 0.8007518796992481, 'explanation_average_similarity': 0.09300965}
+{'accuracy': 0.8258484047957733, 'explanation_average_similarity': 0.09387249}
+{'accuracy': 0.8300142247510669, 'explanation_average_similarity': 0.10237208}
+{'accuracy': 0.8400731558626295, 'explanation_average_similarity': 0.12629768}
+{'accuracy': 0.8536882747409064, 'explanation_average_similarity': 0.11957067}
+{'accuracy': 0.862934362934363, 'explanation_average_similarity': 0.10098894}
+{'accuracy': 0.8621215200162569, 'explanation_average_similarity': 0.108252555}
+{'accuracy': 0.8646616541353384, 'explanation_average_similarity': 0.09964964}
+{'accuracy': 0.8668969721601301, 'explanation_average_similarity': 0.12359276}
+{'accuracy': 0.868827474090632, 'explanation_average_similarity': 0.11466965}
+{'accuracy': 0.8693355009144483, 'explanation_average_similarity': 0.109766774}
+{'accuracy': 0.8726884779516358, 'explanation_average_similarity': 0.12324239}
+{'accuracy': 0.8706563706563707, 'explanation_average_similarity': 0.12666345}
+{'accuracy': 0.8759398496240601, 'explanation_average_similarity': 0.13581182}
+{'accuracy': 0.8781751676488518, 'explanation_average_similarity': 0.13079746}
+{'accuracy': 0.8785815891079048, 'explanation_average_similarity': 0.117290296}
+{'accuracy': 0.8784799837431416, 'explanation_average_similarity': 0.13145906}
+{'accuracy': 0.8771591140012193, 'explanation_average_similarity': 0.19451241}
+{'accuracy': 0.8795976427555375, 'explanation_average_similarity': 0.10309971}
+{'accuracy': 0.8781751676488518, 'explanation_average_similarity': 0.13201377}
+{'accuracy': 0.8781751676488518, 'explanation_average_similarity': 0.123049915}
+{'accuracy': 0.8780735622840886, 'explanation_average_similarity': 0.17335528}
+{'accuracy': 0.8785815891079048, 'explanation_average_similarity': 0.13701642}
+{'accuracy': 0.8780735622840886, 'explanation_average_similarity': 0.1735703}
+{'accuracy': 0.8791912212964844, 'explanation_average_similarity': 0.13859536}
+{'accuracy': 0.8782767730136151, 'explanation_average_similarity': 0.18728963}
+{'accuracy': 0.8795976427555375, 'explanation_average_similarity': 0.13698584}
+{'accuracy': 0.8776671408250356, 'explanation_average_similarity': 0.1939209}
+Test: 
+{'accuracy': 0.8763232899022801, 'explanation_average_similarity': 0.103833735}
+
+
+Task 5 : Fine-tune with only names and verbs in explanations
+{'accuracy': 0.8104043893517577, 'explanation_average_similarity': 0.1196321}
+{'accuracy': 0.8216825848404796, 'explanation_average_similarity': 0.078223765}
+{'accuracy': 0.8355009144482829, 'explanation_average_similarity': 0.08036341}
+{'accuracy': 0.8479983743141638, 'explanation_average_similarity': 0.11535883}
+{'accuracy': 0.8577524893314367, 'explanation_average_similarity': 0.097382456}
+{'accuracy': 0.8561268034952245, 'explanation_average_similarity': 0.08958277}
+{'accuracy': 0.8683194472668156, 'explanation_average_similarity': 0.10183189}
+{'accuracy': 0.8703515545620809, 'explanation_average_similarity': 0.11862079}
+{'accuracy': 0.8714692135744767, 'explanation_average_similarity': 0.0770275}
+{'accuracy': 0.873501320869742, 'explanation_average_similarity': 0.0743138}
+{'accuracy': 0.8746189798821378, 'explanation_average_similarity': 0.08009184}
+{'accuracy': 0.8722820564925828, 'explanation_average_similarity': 0.094661}
+{'accuracy': 0.8781751676488518, 'explanation_average_similarity': 0.10272321}
+{'accuracy': 0.8767526925421663, 'explanation_average_similarity': 0.09968631}
+{'accuracy': 0.8759398496240601, 'explanation_average_similarity': 0.10567403}
+{'accuracy': 0.8811217232269863, 'explanation_average_similarity': 0.09064326}
+{'accuracy': 0.879800853485064, 'explanation_average_similarity': 0.10944948}
+{'accuracy': 0.8828490144279618, 'explanation_average_similarity': 0.097948916}
+{'accuracy': 0.8816297500508027, 'explanation_average_similarity': 0.1076566}
+{'accuracy': 0.8851859378175168, 'explanation_average_similarity': 0.11182468}
+{'accuracy': 0.8807153017679333, 'explanation_average_similarity': 0.108812645}
+{'accuracy': 0.8851859378175168, 'explanation_average_similarity': 0.1132297}
+{'accuracy': 0.8841698841698842, 'explanation_average_similarity': 0.095554315}
+{'accuracy': 0.8822393822393823, 'explanation_average_similarity': 0.08615549}
+{'accuracy': 0.8816297500508027, 'explanation_average_similarity': 0.10883951}
+{'accuracy': 0.882137776874619, 'explanation_average_similarity': 0.11100618}
+{'accuracy': 0.8827474090631985, 'explanation_average_similarity': 0.09487918}
+{'accuracy': 0.88528754318228, 'explanation_average_similarity': 0.10494802}
+{'accuracy': 0.8855923592765698, 'explanation_average_similarity': 0.08739281}
+Test: 
+{'accuracy': 0.8759161237785016, 'explanation_average_similarity': 0.09114464}
+Model :t5-small
