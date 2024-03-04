@@ -41,7 +41,7 @@ The repository contains three notebooks:
 
 ## Installation:
 
-1. Clone the repository:
+Clone the repository and install dependencies:
    ```bash
    git clone https://github.com/DreRnc/ExplainingExplanations
    poetry install
