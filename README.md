@@ -1,4 +1,4 @@
-# T5_Finetuning_for_NLI_Performance_Analysis
+# T5 Finetuning for NLI Performance Analysis
 
 ---
 
@@ -17,7 +17,7 @@ The repository contains three notebooks:
 ### 1. Finetuning Notebook:
 
 - **File Name**: `T5Training.ipynb`
-- **Description**: This notebook contains code for finetuning the T5 transformer model for the NLI task. It includes data preprocessing, model configuration, finetuning loop, and evaluation.
+- **Description**: This notebook is the core of the project and contains code for finetuning the T5 transformer model for the NLI task. It includes data preprocessing, model configuration, finetuning loop, and evaluation.
 - **Usage**: 
   - Run each cell sequentially to finetune the T5 model.
   - Modify hyperparameters and configurations as needed.
@@ -44,4 +44,4 @@ The repository contains three notebooks:
 1. Clone the repository:
    ```bash
    git clone https://github.com/DreRnc/ExplainingExplanations
-   poetry add
+   poetry install
